@@ -1,0 +1,54 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Player</title>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:courier; color:white; background-color: black">
+        <video id="tv"></video>
+        <style type="text/css">
+            #tv {
+                border: 1px solid white;
+                /*images stay same size, fiddle with the scroll bars*/
+                width: 100%;
+                height: 100%;
+
+                /*images get smaller*/
+                /*width: 100vw;*/
+                /*height: 100vh;*/
+                transform: rotate(1deg);
+                overflow: hidden;
+            }
+        </style>
+        <script>
+            // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode
+            // https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#Example_Constraint_exerciser
+            const video_constraints = {
+                // https://addpipe.com/blog/getusermedia-video-constraints/
+                facingMode: { ideal: 'environment' },
+            };
+
+            if (true) {
+                // https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture
+                var displayMediaOptions = {
+                  video: {
+                    cursor: "always"
+                  },
+                  audio: false
+                };
+
+                navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+                .then(stream => {
+                    const vid_el = document.querySelector('#tv');
+                    vid_el.srcObject = stream;
+                    // vid_el.src = stream;
+                    vid_el.onloadedmetadata = () => {
+                        const tracks = stream.getVideoTracks()
+                        vid_el.play() ;
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>
